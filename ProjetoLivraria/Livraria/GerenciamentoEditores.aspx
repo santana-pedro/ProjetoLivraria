@@ -1,32 +1,31 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeBehind="GerenciamentoAutores.aspx.cs" Inherits="ProjetoLivraria.Livraria.GerenciamentoAutores" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeBehind="GerenciamentoEditores.aspx.cs" Inherits="ProjetoLivraria.Livraria.GerenciamentoEditores" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <dx:ASPxFormLayout ID="ASPxFormLayoutPrincipal" runat="server" Width="50%" Theme="Office365">
         <Items>
-            <dx:LayoutGroup Caption="Cadastro de Autor" ColCount="2" SettingsItemCaptions-Location="Top">
+            <dx:LayoutGroup Caption="Cadastro de Editor" ColCount="2" SettingsItemCaptions-Location="Top">
                 <Items>
                     <%-- Campo Nome --%>
                     <dx:LayoutItem Caption="Nome">
                         <ParentContainerStyle Paddings-PaddingRight="12"></ParentContainerStyle>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxTextBox ID="tbxCadastroNomeAutor" runat="server" Width="100%">
+                                <dx:ASPxTextBox ID="tbxCadastroNomeEditor" runat="server" Width="100%">
                                     <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
-                                        <RequiredField IsRequired="True" ErrorText="Digite o nome do Autor!" />
+                                        <RequiredField IsRequired="True" ErrorText="Digite o nome do Editor!" />
                                     </ValidationSettings>
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
 
-                    <%-- Campo Sobrenome --%>
-                    <dx:LayoutItem Caption="Sobrenome">
+                    <%-- Campo Url --%>
+                    <dx:LayoutItem Caption="URL">
                         <ParentContainerStyle Paddings-PaddingLeft="0" Paddings-PaddingRight="12"></ParentContainerStyle>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxTextBox ID="tbxCadastroSobrenomeAutor" runat="server" Width="100%">
+                                <dx:ASPxTextBox ID="tbxCadastroUrlEditor" runat="server" Width="100%">
                                     <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
-                                        <RequiredField IsRequired="true" ErrorText="Digite o sobrenome do Autor!" />
+                                        <RequiredField IsRequired="true" ErrorText="Digite a URL do Editor!" />
                                     </ValidationSettings>
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
@@ -37,9 +36,9 @@
                     <dx:LayoutItem Caption="E-Mail" ColSpan="2">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxTextBox ID="tbxCadastroEmailAutor" runat="server" Width="100%">
+                                <dx:ASPxTextBox ID="tbxCadastroEmailEditor" runat="server" Width="100%">
                                     <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
-                                        <RequiredField IsRequired="True" ErrorText="Digite o email do Autor!" />
+                                        <RequiredField IsRequired="True" ErrorText="Digite o email do Editor!" />
                                         <RegularExpression ErrorText="Email inválido" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" />
                                     </ValidationSettings>
                                 </dx:ASPxTextBox>
@@ -51,41 +50,25 @@
                     <dx:LayoutItem Caption="" ColSpan="2">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxButton ID="btnSalvar" runat="server" Text="Salvar" AutoPostBack="true" Width="100%" OnClick="BtnNovoAutor_Click" ValidationGroup="MyGroup" />
+                                <dx:ASPxButton ID="btnSalvar" runat="server" Text="Salvar" AutoPostBack="true" Width="100%" OnClick="BtnNovoEditor_Click" ValidationGroup="MyGroup" />
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
-                    
+                
                 </Items>
             </dx:LayoutGroup>
         </Items>
     </dx:ASPxFormLayout>
-    <script type:"text/javascript">
-        function OnEndCallback(s, e) {
-            if (s.cpRedirectionToLivros) {
-                window.location.href = '/Livraria/GerenciamentoLivros.aspx'
-            }
-        }
-    </script>
-    <dx:ASPxGridView ID="gvGerenciamentoAutores" runat="server" ShowInsert="True" AllowEditing="True" Width="100%" KeyFieldName="aut_id_autor"
-        OnRowUpdating="gvGerenciamentoAutores_RowUpdating"
-        OnRowDeleting="gvGerenciamentoAutores_RowDeleting"
-        OnCustomButtonCallback="gvGerenciamentoAutores_CustomButtonCallback">
-        <ClientSideEvents EndCallback="OnEndCallback" />
-
+    <dx:ASPxGridView ID="gvGerenciamentoEditores" runat="server" Width="100%" AllowEditing="True" KeyFieldName="edi_id_editor" Theme="Office365" CssClass="gridStyle" OnRowUpdating="gvGerenciamentoEditores_RowUpdating" OnRowDeleting="gvGerenciamentoEditores_RowDeleting">
         <Columns>
-            <dx:GridViewDataTextColumn FieldName="aut_id_autor" Caption="Id" Visible="false" />
-            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="15" FieldName="aut_nm_nome" Caption="Nome" />
-            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="50" FieldName="aut_nm_sobrenome" Caption="Sobrenome" />
-            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="50" FieldName="aut_ds_email" Caption="Email" />
+            <dx:GridViewDataTextColumn FieldName="edi_id_editor" Caption="Id" Visible="false" />
+            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="15" FieldName="edi_nm_nome" Caption="Nome" />
+            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="50" FieldName="edi_ds_email" Caption="Email" />
+            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="50" FieldName="edi_ds_url" Caption="URL" />
 
             <dx:GridViewCommandColumn ShowEditButton="True" ShowDeleteButton="True">
-                <CustomButtons>
-                    <dx:GridViewCommandColumnCustomButton ID="btnLivros" Text="Livros"/>
-                    <dx:GridViewCommandColumnCustomButton ID="btnAutorInfo" Text="Informação"/>
-                </CustomButtons>
             </dx:GridViewCommandColumn>
         </Columns>
-        <SettingsEditing Mode="Batch" />
+        <Settings ShowFilterRow="False" ShowGroupPanel="True" />
     </dx:ASPxGridView>
 </asp:Content>

@@ -12,42 +12,7 @@ namespace ProjetoLivraria.DAO
         SqlCommand ioQuery;
         SqlConnection ioConexao;
 
-        public BindingList<LivroAutor> BuscarLivros(int? idLivro = null)
-        {
-            BindingList<LivroAutor> loListLivroAutor = new BindingList<LivroAutor>();
-            using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
-            {
-                try
-                {
-                    ioConexao.Open();
-                    if (idLivro != null)
-                    {
-                        ioQuery = new SqlCommand("SELECT * FROM LIA_LIVRO_AUTOR WHERE LIA_ID_LIVRO = @idLivro", ioConexao);
-                        ioQuery.Parameters.AddWithValue("@idLivro", idLivro);
-
-                    }
-                    else
-                    {
-                        ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS", ioConexao);
-                    }
-                    using (SqlDataReader loReader = ioQuery.ExecuteReader())
-                    {
-                        while (loReader.Read())
-                        {
-                            LivroAutor loNovoLivroAutor = new LivroAutor(loReader.GetInt32(0), loReader.GetInt32(1), loReader.GetDouble(2));
-                            loListLivroAutor.Add(loNovoLivroAutor);
-                        }
-                        loReader.Close();
-                    }
-                }
-                catch
-                {
-                    throw new Exception("Erro ao buscar o(s) livro(s) em livro autor.");
-                }
-            }
-            return loListLivroAutor;
-        }
-        public BindingList<LivroAutor> BuscarAutores(int? idAutor = null)
+        public BindingList<LivroAutor> BuscarLivroAutor(decimal? idAutor)
         {
             BindingList<LivroAutor> loListLivroAutor = new BindingList<LivroAutor>();
             using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
@@ -69,7 +34,7 @@ namespace ProjetoLivraria.DAO
                     {
                         while (loReader.Read())
                         {
-                            LivroAutor loNovoLivroAutor = new LivroAutor(loReader.GetInt32(0), loReader.GetInt32(1), loReader.GetDouble(2));
+                            LivroAutor loNovoLivroAutor = new LivroAutor(loReader.GetDecimal(0), loReader.GetDecimal(1), loReader.GetDouble(2));
                             loListLivroAutor.Add(loNovoLivroAutor);
                         }
                         loReader.Close();
@@ -77,10 +42,70 @@ namespace ProjetoLivraria.DAO
                 }
                 catch
                 {
-                    throw new Exception("Erro ao buscar o(s) autor(s) em livro autor.");
+                    throw new Exception("Erro ao buscar em livro autor.");
                 }
             }
             return loListLivroAutor;
+        }
+
+        public BindingList<Livros> BuscarLivrosDeAutor(decimal idAutor)
+        {
+            BindingList<Livros> loListLivrosDeAutor = new BindingList<Livros>();
+            using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            {
+                try
+                {
+                    ioConexao.Open();
+
+                    ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS AS L WHERE L.LIV_ID_LIVRO IN (SELECT LA.LIA_ID_LIVRO FROM LIA_LIVRO_AUTOR AS LA WHERE LA.LIA_ID_AUTOR = @idAutor", ioConexao);
+                    ioQuery.Parameters.AddWithValue("@idAutor", idAutor);
+
+                    using (SqlDataReader loReader = ioQuery.ExecuteReader())
+                    {
+                        while (loReader.Read())
+                        {
+                            Livros loNovoLivroAutor = new Livros(loReader.GetDecimal(0), loReader.GetDecimal(1), loReader.GetDecimal(2), loReader.GetString(3), loReader.GetDouble(4), loReader.GetDouble(5), loReader.GetString(6), loReader.GetInt32(6));
+                            loListLivrosDeAutor.Add(loNovoLivroAutor);
+                        }
+                        loReader.Close();
+                    }
+                }
+                catch
+                {
+                    throw new Exception("Erro ao buscar o(s) livro(s) de um autor.");
+                }
+            }
+            return loListLivrosDeAutor;
+        }
+
+        public BindingList<Autores> BuscarAutoresDeLivro(decimal idLivro)
+        {
+            BindingList<Autores> loListAutoresDeLivro = new BindingList<Autores>();
+            using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            {
+                try
+                {
+                    ioConexao.Open();
+
+                    ioQuery = new SqlCommand("SELECT * FROM AUT_AUTORES AS A WHERE AUT_ID_AUTOR IN (SELECT LA.LIA_ID_AUTOR FROM LIA_LIVRO_AUTOR AS LA WHERE LA.LIA_ID_LIVRO = @idLivro)", ioConexao);
+                    ioQuery.Parameters.AddWithValue("@idLivro", idLivro);
+
+                    using (SqlDataReader loReader = ioQuery.ExecuteReader())
+                    {
+                        while (loReader.Read())
+                        {
+                            Autores loNovoAutorDeLivro = new Autores(loReader.GetDecimal(0), loReader.GetString(1), loReader.GetString(2), loReader.GetString(3));
+                            loListAutoresDeLivro.Add(loNovoAutorDeLivro);
+                        }
+                        loReader.Close();
+                    }
+                }
+                catch
+                {
+                    throw new Exception("Erro ao buscar o(s) autor(s) de um livro.");
+                }
+            }
+            return loListAutoresDeLivro;
         }
         public int InsereLivroAutor(LivroAutor aoNovoLivroAutor)
         {
@@ -97,9 +122,9 @@ namespace ProjetoLivraria.DAO
                     ioQuery.Parameters.Add(new SqlParameter("@royaltyLivro", aoNovoLivroAutor.lia_pc_royalty));
                     liQtdRegistrosInseridos = ioQuery.ExecuteNonQuery();
                 }
-                catch (Exception ex)
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao tentar cadastrar novo livro autor.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return liQtdRegistrosInseridos;

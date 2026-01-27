@@ -11,7 +11,7 @@ namespace ProjetoLivraria.Livraria
 {
 
 
-    public partial class GerenciamentoAutores
+    public partial class GerenciamentoLivros
     {
 
         /// <summary>
@@ -24,66 +24,93 @@ namespace ProjetoLivraria.Livraria
         protected global::DevExpress.Web.ASPxFormLayout ASPxFormLayoutPrincipal;
 
         /// <summary>
-        /// Controle tbxCadastroNomeAutor.
+        /// Controle cmbCadastroTipoLivro.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroNomeAutor;
+        protected global::DevExpress.Web.ASPxComboBox cmbCadastroTipoLivro;
 
         /// <summary>
-        /// Controle tbxCadastroSobrenomeAutor.
+        /// Controle cmbCadastroIdEditorLivro.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroSobrenomeAutor;
+        protected global::DevExpress.Web.ASPxComboBox cmbCadastroIdEditorLivro;
 
         /// <summary>
-        /// Controle tbxCadastroEmailAutor.
+        /// Controle cmbCadastroAutor.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroEmailAutor;
+        protected global::DevExpress.Web.ASPxComboBox cmbCadastroAutor;
 
         /// <summary>
-        /// Controle btnSalvar.
+        /// Controle tbxCadastroTituloLivro.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxButton btnSalvar;
+        protected global::DevExpress.Web.ASPxTextBox tbxCadastroTituloLivro;
 
         /// <summary>
-        /// Controle gvGerenciamentoAutores.
+        /// Controle tbxCadastroPrecoLivro.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView gvGerenciamentoAutores;
+        protected global::DevExpress.Web.ASPxTextBox tbxCadastroPrecoLivro;
 
         /// <summary>
-        /// Controle btnLivros.
+        /// Controle tbxCadastroRoyaltyLivro.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnLivros;
+        protected global::DevExpress.Web.ASPxTextBox tbxCadastroRoyaltyLivro;
 
         /// <summary>
-        /// Controle btnAutorInfo.
+        /// Controle tbxCadastroEdicaoLivro.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.GridViewCommandColumnCustomButton btnAutorInfo;
+        protected global::DevExpress.Web.ASPxTextBox tbxCadastroEdicaoLivro;
+
+        /// <summary>
+        /// Controle tbxCadastroResumoLivro.
+        /// </summary>
+        /// <remarks>
+        /// Campo gerado automaticamente.
+        /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxTextBox tbxCadastroResumoLivro;
+
+        /// <summary>
+        /// Controle btnSalvarLivro.
+        /// </summary>
+        /// <remarks>
+        /// Campo gerado automaticamente.
+        /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxButton btnSalvarLivro;
+
+        /// <summary>
+        /// Controle gvGerenciamentoLivros.
+        /// </summary>
+        /// <remarks>
+        /// Campo gerado automaticamente.
+        /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
+        /// </remarks>
+        protected global::DevExpress.Web.ASPxGridView gvGerenciamentoLivros;
     }
 }

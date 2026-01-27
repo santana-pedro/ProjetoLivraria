@@ -12,7 +12,7 @@ namespace ProjetoLivraria.DAO
         SqlCommand ioQuery;
         SqlConnection ioConexao;
 
-        public BindingList<Editores> BuscarEditores(int? idEditor = null)
+        public BindingList<Editores> BuscarEditores(decimal? idEditor = null)
         {
             BindingList<Editores> loListEditores = new BindingList<Editores>();
             using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
@@ -34,7 +34,7 @@ namespace ProjetoLivraria.DAO
                     {
                         while (loReader.Read())
                         {
-                            Editores loNovoEditor = new Editores(loReader.GetInt32(0), loReader.GetString(1), loReader.GetString(2), loReader.GetString(3));
+                            Editores loNovoEditor = new Editores(loReader.GetDecimal(0), loReader.GetString(1), loReader.GetString(2), loReader.GetString(3));
                             loListEditores.Add(loNovoEditor);
                         }
                         loReader.Close();
@@ -70,9 +70,8 @@ namespace ProjetoLivraria.DAO
             }
             return liQtdRegistrosInseridos;
         }
-        public int RemoveEditor(Editores aoEditor)
+        public int RemoveEditor(decimal idAoEditor)
         {
-            if (aoEditor == null) throw new NullReferenceException();
             int liQtdRegistrosExcluidos = 0;
             using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
             {
@@ -80,12 +79,12 @@ namespace ProjetoLivraria.DAO
                 {
                     ioConexao.Open(); 
                     ioQuery = new SqlCommand("DELETE FROM EDI_EDITORES WHERE EDI_ID_EDITOR = @idEditor", ioConexao);
-                    ioQuery.Parameters.Add(new SqlParameter("@idAutor", aoEditor.edi_id_editor));
+                    ioQuery.Parameters.Add(new SqlParameter("@idEditor", idAoEditor));
                     liQtdRegistrosExcluidos = ioQuery.ExecuteNonQuery();
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao tentar excluir editor.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return liQtdRegistrosExcluidos;

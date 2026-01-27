@@ -9,12 +9,13 @@ namespace ProjetoLivraria.DAO
 {
     public class AutoresDAO
     {
+        SqlConnection ioConexao;
         SqlCommand ioQuery;
 
-        public BindingList<Autores> BuscarAutores(int? idAutor = null)
+        public BindingList<Autores> BuscarAutores(decimal? idAutor = null)
         {
             BindingList<Autores> loListAutores = new BindingList<Autores>();
-            using (SqlConnection ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            using ( ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
             {
                 try
                 {
@@ -33,16 +34,17 @@ namespace ProjetoLivraria.DAO
                     {
                         while (loReader.Read())
                         {
-                            Autores loNovoAutor = new Autores(loReader.GetInt32(0), loReader.GetString(1), loReader.GetString(2), loReader.GetString(3));
+                            Autores loNovoAutor = new Autores(loReader.GetDecimal(0), loReader.GetString(1), loReader.GetString(2), loReader.GetString(3));
                             loListAutores.Add(loNovoAutor);
                         }
                         loReader.Close();
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    throw new Exception("Erro ao buscar o(s) autor(s).");
+                    Console.WriteLine("Erro ao buscar autores: " + ex.Message);
                 }
+                
             }
             return loListAutores;
         }
@@ -88,7 +90,6 @@ namespace ProjetoLivraria.DAO
                 try { 
                     ioConexao.Open(); 
                     ioQuery = new SqlCommand("UPDATE AUT_AUTORES SET AUT_NM_NOME = @nomeAutor, AUT_NM_SOBRENOME = @sobrenomeAutor, AUT_DS_EMAIL = @emailAutor WHERE AUT_ID_AUTOR = @idAutor", ioConexao); 
-                    ioQuery.Parameters.Add(new SqlParameter("@idAutor", aoAutor.aut_id_autor)); 
                     ioQuery.Parameters.Add(new SqlParameter("@nomeAutor", aoAutor.aut_nm_nome)); 
                     ioQuery.Parameters.Add(new SqlParameter("@sobrenomeAutor", aoAutor.aut_nm_sobrenome)); 
                     ioQuery.Parameters.Add(new SqlParameter("@emailAutor", aoAutor.aut_ds_email)); liQtdLinhasAtualizadas = ioQuery.ExecuteNonQuery(); 

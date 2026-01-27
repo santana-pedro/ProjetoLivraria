@@ -4,19 +4,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta charset="UTF-8" />
-    <title>DevExpress ASP.NET project</title>
+    <title>SAGRES Livraria</title>
     <link href="~/Content/Site.css" rel="stylesheet" /> 
 </head>
 <body>
     <form id="form1" runat="server">
         <div class="content-wrapper">
             <div class="header">
-                <h1>DevExpress ASP.NET project</h1>
+                <h1>SAGRES Livraria</h1>
                 <dx:ASPxMenu ID="HeaderMenu" runat="server" ItemAutoWidth="False" Width="100%">
                     <items>
-                        <dx:MenuItem Text="Home"></dx:MenuItem>
-                        <dx:MenuItem Text="About"></dx:MenuItem>
-                        <dx:MenuItem Text="Contact"></dx:MenuItem>
+                        <dx:MenuItem Text="Autores" NavigateUrl='/Livraria/GerenciamentoAutores.aspx' />
+                        <dx:MenuItem Text="Livros" NavigateUrl='/Livraria/GerenciamentoLivros.aspx' />
+                        <dx:MenuItem Text="Categorias" />
+                        <dx:MenuItem Text="Editores" NavigateUrl='/Livraria/GerenciamentoEditores.aspx'/>
                     </items>
                     <border borderwidth="0px" />
                     <paddings padding="0px" />

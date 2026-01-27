@@ -12,7 +12,7 @@ namespace ProjetoLivraria.DAO
         SqlCommand ioQuery;
         SqlConnection ioConexao;
 
-        public BindingList<TipoLivros> BuscarLivros(int? idTipoLivro = null)
+        public BindingList<TipoLivros> BuscarTipoLivro(decimal? idTipoLivro = null)
         {
             BindingList<TipoLivros> loListTipoLivros = new BindingList<TipoLivros>();
             using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
@@ -22,19 +22,19 @@ namespace ProjetoLivraria.DAO
                     ioConexao.Open();
                     if (idTipoLivro != null)
                     {
-                        ioQuery = new SqlCommand("SELECT * FROM TIL_TIPO_LIVROS WHERE TIL_ID_TIPO_LIVREO = @idTipoLivro", ioConexao);
+                        ioQuery = new SqlCommand("SELECT * FROM TIL_TIPO_LIVRO WHERE TIL_ID_TIPO_LIVRO = @idTipoLivro", ioConexao);
                         ioQuery.Parameters.AddWithValue("@idTipoLivro", idTipoLivro);
 
                     }
                     else
                     {
-                        ioQuery = new SqlCommand("SELECT * FROM TIL_TIPO_LIVROS", ioConexao);
+                        ioQuery = new SqlCommand("SELECT * FROM TIL_TIPO_LIVRO", ioConexao);
                     }
                     using (SqlDataReader loReader = ioQuery.ExecuteReader())
                     {
                         while (loReader.Read())
                         {
-                            TipoLivros loNovoTipoLivro = new TipoLivros(loReader.GetInt32(0), loReader.GetString(1));
+                            TipoLivros loNovoTipoLivro = new TipoLivros(loReader.GetDecimal(0), loReader.GetString(1));
                             loListTipoLivros.Add(loNovoTipoLivro);
                         }
                         loReader.Close();
@@ -42,7 +42,7 @@ namespace ProjetoLivraria.DAO
                 }
                 catch
                 {
-                    throw new Exception("Erro ao buscar o(s) autor(s).");
+                    throw new Exception("Erro ao buscar o(s) tipo livro(s).");
                 }
             }
             return loListTipoLivros;

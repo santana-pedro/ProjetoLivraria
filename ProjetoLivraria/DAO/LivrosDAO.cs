@@ -12,7 +12,7 @@ namespace ProjetoLivraria.DAO
         SqlCommand ioQuery;
         SqlConnection ioConexao;
 
-        public BindingList<Livros> BuscarLivros(int? idLivro = null)
+        public BindingList<Livros> BuscarLivros(decimal? idLivro = null)
         {
             BindingList<Livros> loListLivros = new BindingList<Livros>();
             using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
@@ -34,15 +34,15 @@ namespace ProjetoLivraria.DAO
                     {
                         while (loReader.Read())
                         {
-                            Livros loNovoLivro = new Livros(loReader.GetInt32(0), loReader.GetInt32(1), loReader.GetInt32(2), loReader.GetString(3), loReader.GetDouble(4), loReader.GetDouble(5), loReader.GetString(6), loReader.GetInt32(7));
+                            Livros loNovoLivro = new Livros(Convert.ToDecimal(loReader["LIV_ID_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_TIPO_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_EDITOR"]), loReader["LIV_NM_TITULO"]?.ToString() ?? "", Convert.ToDouble(loReader["LIV_VL_PRECO"]), Convert.ToDouble(loReader["LIV_PC_ROYALTY"]),loReader["LIV_DS_RESUMO"]?.ToString() ?? "", Convert.ToInt32(loReader["LIV_NU_EDICAO"]), null);
                             loListLivros.Add(loNovoLivro);
                         }
                         loReader.Close();
                     }
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao buscar o(s) livro(s).");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return loListLivros;
@@ -74,16 +74,16 @@ namespace ProjetoLivraria.DAO
             }
             return liQtdRegistrosInseridos;
         }
-        public int RemoveLivro(Livros aoLivro)
+        public int RemoveLivro(decimal idAoLivro)
         {
-            if (aoLivro == null) throw new NullReferenceException();
+            if (idAoLivro < 0) throw new NullReferenceException();
             int liQtdRegistrosExcluidos = 0;
             using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
             {
                 try
                 {
                     ioConexao.Open(); ioQuery = new SqlCommand("DELETE FROM LIV_LIVROS WHERE LIV_ID_LIVRO = @idLivro", ioConexao);
-                    ioQuery.Parameters.Add(new SqlParameter("@idLivro", aoLivro.liv_id_livro));
+                    ioQuery.Parameters.Add(new SqlParameter("@idLivro", idAoLivro));
                     liQtdRegistrosExcluidos = ioQuery.ExecuteNonQuery();
                 }
                 catch
