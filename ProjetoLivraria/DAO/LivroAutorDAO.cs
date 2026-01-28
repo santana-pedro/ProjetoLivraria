@@ -40,9 +40,9 @@ namespace ProjetoLivraria.DAO
                         loReader.Close();
                     }
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao buscar em livro autor.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return loListLivroAutor;
@@ -57,22 +57,22 @@ namespace ProjetoLivraria.DAO
                 {
                     ioConexao.Open();
 
-                    ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS AS L WHERE L.LIV_ID_LIVRO IN (SELECT LA.LIA_ID_LIVRO FROM LIA_LIVRO_AUTOR AS LA WHERE LA.LIA_ID_AUTOR = @idAutor", ioConexao);
+                    ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS AS L WHERE L.LIV_ID_LIVRO IN (SELECT LA.LIA_ID_LIVRO FROM LIA_LIVRO_AUTOR AS LA WHERE LA.LIA_ID_AUTOR = @idAutor)", ioConexao);
                     ioQuery.Parameters.AddWithValue("@idAutor", idAutor);
 
                     using (SqlDataReader loReader = ioQuery.ExecuteReader())
                     {
                         while (loReader.Read())
                         {
-                            Livros loNovoLivroAutor = new Livros(loReader.GetDecimal(0), loReader.GetDecimal(1), loReader.GetDecimal(2), loReader.GetString(3), loReader.GetDouble(4), loReader.GetDouble(5), loReader.GetString(6), loReader.GetInt32(6));
-                            loListLivrosDeAutor.Add(loNovoLivroAutor);
+                            Livros loNovoLivro = new Livros(Convert.ToDecimal(loReader["LIV_ID_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_TIPO_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_EDITOR"]), loReader["LIV_NM_TITULO"]?.ToString() ?? "", Convert.ToDouble(loReader["LIV_VL_PRECO"]), Convert.ToDouble(loReader["LIV_PC_ROYALTY"]), loReader["LIV_DS_RESUMO"]?.ToString() ?? "", Convert.ToInt32(loReader["LIV_NU_EDICAO"]), null);
+                            loListLivrosDeAutor.Add(loNovoLivro);
                         }
                         loReader.Close();
                     }
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao buscar o(s) livro(s) de um autor.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return loListLivrosDeAutor;
@@ -100,12 +100,71 @@ namespace ProjetoLivraria.DAO
                         loReader.Close();
                     }
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao buscar o(s) autor(s) de um livro.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return loListAutoresDeLivro;
+        }
+        //EXTRAS
+        public BindingList<Livros> BuscarLivrosDeEditor(decimal idEditor)
+        {
+            BindingList<Livros> loListLivrosDeAutor = new BindingList<Livros>();
+            using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            {
+                try
+                {
+                    ioConexao.Open();
+
+                    ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS WHERE LIV_ID_EDITOR = @idEditor", ioConexao);
+                    ioQuery.Parameters.AddWithValue("@idEditor", idEditor);
+
+                    using (SqlDataReader loReader = ioQuery.ExecuteReader())
+                    {
+                        while (loReader.Read())
+                        {
+                            Livros loNovoLivro = new Livros(Convert.ToDecimal(loReader["LIV_ID_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_TIPO_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_EDITOR"]), loReader["LIV_NM_TITULO"]?.ToString() ?? "", Convert.ToDouble(loReader["LIV_VL_PRECO"]), Convert.ToDouble(loReader["LIV_PC_ROYALTY"]), loReader["LIV_DS_RESUMO"]?.ToString() ?? "", Convert.ToInt32(loReader["LIV_NU_EDICAO"]), null);
+                            loListLivrosDeAutor.Add(loNovoLivro);
+                        }
+                        loReader.Close();
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
+                }
+            }
+            return loListLivrosDeAutor;
+        }
+        public BindingList<Livros> BuscarLivrosDeTipo(decimal idTipoLivro)
+        {
+            BindingList<Livros> loListLivrosDeAutor = new BindingList<Livros>();
+            using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            {
+                try
+                {
+                    ioConexao.Open();
+
+                    ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS WHERE LIV_ID_TIPO_LIVRO = @idTipoLivro", ioConexao);
+                    ioQuery.Parameters.AddWithValue("@idTipoLivro", idTipoLivro);
+
+                    using (SqlDataReader loReader = ioQuery.ExecuteReader())
+                    {
+                        while (loReader.Read())
+                        {
+                            Livros loNovoLivro = new Livros(Convert.ToDecimal(loReader["LIV_ID_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_TIPO_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_EDITOR"]), loReader["LIV_NM_TITULO"]?.ToString() ?? "", Convert.ToDouble(loReader["LIV_VL_PRECO"]), Convert.ToDouble(loReader["LIV_PC_ROYALTY"]), loReader["LIV_DS_RESUMO"]?.ToString() ?? "", Convert.ToInt32(loReader["LIV_NU_EDICAO"]), null);
+                            loListLivrosDeAutor.Add(loNovoLivro);
+                        }
+                        loReader.Close();
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
+                }
+            }
+            return loListLivrosDeAutor;
         }
         public int InsereLivroAutor(LivroAutor aoNovoLivroAutor)
         {
@@ -142,9 +201,9 @@ namespace ProjetoLivraria.DAO
                     ioQuery.Parameters.Add(new SqlParameter("@idLivro", aoLivroAutor.lia_id_livro));
                     liQtdRegistrosExcluidos = ioQuery.ExecuteNonQuery();
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao tentar excluir livro autor.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return liQtdRegistrosExcluidos;
@@ -164,9 +223,9 @@ namespace ProjetoLivraria.DAO
                     ioQuery.Parameters.Add(new SqlParameter("@royaltyLivroAutor", aoLivroAutor.lia_pc_royalty));
                     liQtdLinhasAtualizadas = ioQuery.ExecuteNonQuery();
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao tentar atualizar informações do livro autor.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return liQtdLinhasAtualizadas;

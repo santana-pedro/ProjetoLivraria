@@ -33,7 +33,31 @@ namespace ProjetoLivraria.Livraria
         {
             try
             {
-                this.ListaLivros = this.ioLivrosDAO.BuscarLivros();
+                Autores loAutorFiltro = Session["SessionAutorSelecionado"] as Autores;
+                Editores loEditorFiltro = Session["SessionEditorSelecionado"] as Editores;
+                TipoLivros loTipoLivroFiltro = Session["SessionTipoLivroSelecionado"] as TipoLivros;
+
+                LivroAutorDAO ioLivroAutorDAO = new LivroAutorDAO();
+
+                if (loAutorFiltro != null)
+                {
+                    this.ListaLivros = ioLivroAutorDAO.BuscarLivrosDeAutor(loAutorFiltro.aut_id_autor);
+                    Session["SessionAutorSelecionado"] = null;
+                }
+                if(loEditorFiltro != null)
+                {
+                    this.ListaLivros = ioLivroAutorDAO.BuscarLivrosDeEditor(loEditorFiltro.edi_id_editor);
+                    Session["SessionEditorSelecionado"] = null;
+                }
+                if(loTipoLivroFiltro != null)
+                {
+                    this.ListaLivros = ioLivroAutorDAO.BuscarLivrosDeTipo(loTipoLivroFiltro.til_id_tipo_livro);
+                    Session["SessionTipoLivroSelecionado"] = null;
+                }
+                if(loTipoLivroFiltro == null && loEditorFiltro == null && loAutorFiltro == null)
+                {
+                    this.ListaLivros = this.ioLivrosDAO.BuscarLivros();
+                }
                 this.gvGerenciamentoLivros.DataSource = this.ListaLivros;
                 this.gvGerenciamentoLivros.DataBind();
             }
@@ -70,8 +94,8 @@ namespace ProjetoLivraria.Livraria
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            this.BindGridColumns();
             this.CarregaDados();
+            this.BindGridColumns();
             this.PreencherComboBoxes();
         }
         protected void BtnNovoLivro_Click(object sender, EventArgs e)

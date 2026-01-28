@@ -11,7 +11,7 @@ namespace ProjetoLivraria.Livraria
 {
 
 
-    public partial class GerenciamentoEditores
+    public partial class GerenciamentoCategorias
     {
 
         /// <summary>
@@ -24,31 +24,13 @@ namespace ProjetoLivraria.Livraria
         protected global::DevExpress.Web.ASPxFormLayout ASPxFormLayoutPrincipal;
 
         /// <summary>
-        /// Controle tbxCadastroNomeEditor.
+        /// Controle tbxCadastroDescricaoCategoria.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroNomeEditor;
-
-        /// <summary>
-        /// Controle tbxCadastroUrlEditor.
-        /// </summary>
-        /// <remarks>
-        /// Campo gerado automaticamente.
-        /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroUrlEditor;
-
-        /// <summary>
-        /// Controle tbxCadastroEmailEditor.
-        /// </summary>
-        /// <remarks>
-        /// Campo gerado automaticamente.
-        /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroEmailEditor;
+        protected global::DevExpress.Web.ASPxTextBox tbxCadastroDescricaoCategoria;
 
         /// <summary>
         /// Controle btnSalvar.
@@ -60,13 +42,13 @@ namespace ProjetoLivraria.Livraria
         protected global::DevExpress.Web.ASPxButton btnSalvar;
 
         /// <summary>
-        /// Controle gvGerenciamentoEditores.
+        /// Controle gvGerenciamentoCategorias.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView gvGerenciamentoEditores;
+        protected global::DevExpress.Web.ASPxGridView gvGerenciamentoCategorias;
 
         /// <summary>
         /// Controle btnLivros.

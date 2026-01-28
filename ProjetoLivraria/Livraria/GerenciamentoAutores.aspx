@@ -63,6 +63,7 @@
     <script type:"text/javascript">
         function OnEndCallback(s, e) {
             if (s.cpRedirectionToLivros) {
+                delete s.cpRedirectionToLivros;
                 window.location.href = '/Livraria/GerenciamentoLivros.aspx'
             }
         }

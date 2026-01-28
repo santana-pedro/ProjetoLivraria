@@ -59,7 +59,16 @@
             </dx:LayoutGroup>
         </Items>
     </dx:ASPxFormLayout>
-    <dx:ASPxGridView ID="gvGerenciamentoEditores" runat="server" Width="100%" AllowEditing="True" KeyFieldName="edi_id_editor" Theme="Office365" CssClass="gridStyle" OnRowUpdating="gvGerenciamentoEditores_RowUpdating" OnRowDeleting="gvGerenciamentoEditores_RowDeleting">
+    <script type:"text/javascript">
+    function OnEndCallback(s, e) {
+        if (s.cpRedirectionToLivros) {
+            delete s.cpRedirectionToLivros;
+            window.location.href = '/Livraria/GerenciamentoLivros.aspx'
+        }
+    }
+    </script>
+    <dx:ASPxGridView ID="gvGerenciamentoEditores" runat="server" Width="100%" AllowEditing="True" KeyFieldName="edi_id_editor" Theme="Office365" CssClass="gridStyle" OnRowUpdating="gvGerenciamentoEditores_RowUpdating" OnRowDeleting="gvGerenciamentoEditores_RowDeleting" OnCustomButtonCallback="gvGerenciamentoEditores_CustomButtonCallback">
+        <ClientSideEvents EndCallback="OnEndCallback" />
         <Columns>
             <dx:GridViewDataTextColumn FieldName="edi_id_editor" Caption="Id" Visible="false" />
             <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="15" FieldName="edi_nm_nome" Caption="Nome" />
@@ -67,8 +76,12 @@
             <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="50" FieldName="edi_ds_url" Caption="URL" />
 
             <dx:GridViewCommandColumn ShowEditButton="True" ShowDeleteButton="True">
+                <CustomButtons>
+                    <dx:GridViewCommandColumnCustomButton ID="btnLivros" Text="Livros"/>
+                </CustomButtons>
             </dx:GridViewCommandColumn>
         </Columns>
         <Settings ShowFilterRow="False" ShowGroupPanel="True" />
+        <SettingsEditing Mode="Batch" />
     </dx:ASPxGridView>
 </asp:Content>

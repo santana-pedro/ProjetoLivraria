@@ -40,9 +40,9 @@ namespace ProjetoLivraria.DAO
                         loReader.Close();
                     }
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao buscar o(s) tipo livro(s).");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return loListTipoLivros;
@@ -56,34 +56,33 @@ namespace ProjetoLivraria.DAO
                 try
                 {
                     ioConexao.Open();
-                    ioQuery = new SqlCommand("INSERT INTO TIL_TIPO_LIVROS(TIL_ID_TIPO_LIVRO, TIL_DS_DESCRICAO) VALUES(@idTipoLivro, @descricaoTipoLivro)", ioConexao);
+                    ioQuery = new SqlCommand("INSERT INTO TIL_TIPO_LIVRO(TIL_ID_TIPO_LIVRO, TIL_DS_DESCRICAO) VALUES(@idTipoLivro, @descricaoTipoLivro)", ioConexao);
                     ioQuery.Parameters.Add(new SqlParameter("@idTipoLivro", aoNovoTipoLivro.til_id_tipo_livro));
                     ioQuery.Parameters.Add(new SqlParameter("@descricaoTipoLivro", aoNovoTipoLivro.til_ds_descricao));
                     liQtdRegistrosInseridos = ioQuery.ExecuteNonQuery();
                 }
-                catch (Exception ex)
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao tentar cadastrar novo tipo livro.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return liQtdRegistrosInseridos;
         }
-        public int RemoveTipoLivro(TipoLivros aoTipoLivro)
+        public int RemoveTipoLivro(decimal idTipoLivro)
         {
-            if (aoTipoLivro == null) throw new NullReferenceException();
             int liQtdRegistrosExcluidos = 0;
             using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
             {
                 try
                 {
                     ioConexao.Open(); 
-                    ioQuery = new SqlCommand("DELETE FROM TIL_TIPO_LIVROS WHERE TIL_ID_TIPO_LIVRO = @idTipoLivro", ioConexao);
-                    ioQuery.Parameters.Add(new SqlParameter("@idTipoLivro", aoTipoLivro.til_id_tipo_livro));
+                    ioQuery = new SqlCommand("DELETE FROM TIL_TIPO_LIVRO WHERE TIL_ID_TIPO_LIVRO = @idTipoLivro", ioConexao);
+                    ioQuery.Parameters.Add(new SqlParameter("@idTipoLivro", idTipoLivro));
                     liQtdRegistrosExcluidos = ioQuery.ExecuteNonQuery();
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao tentar excluir tipo livro.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return liQtdRegistrosExcluidos;
@@ -97,14 +96,14 @@ namespace ProjetoLivraria.DAO
                 try
                 {
                     ioConexao.Open();
-                    ioQuery = new SqlCommand("UPDATE TIL_TIPO_LIVROS SET TIL_DS_DESCRICAO = @descricaoTipoLivro WHERE TIL_ID_TIPO_LIVRO = @idTipoLivro", ioConexao);
+                    ioQuery = new SqlCommand("UPDATE TIL_TIPO_LIVRO SET TIL_DS_DESCRICAO = @descricaoTipoLivro WHERE TIL_ID_TIPO_LIVRO = @idTipoLivro", ioConexao);
                     ioQuery.Parameters.Add(new SqlParameter("@idTipoLivro", aoTipoLivro.til_id_tipo_livro));
                     ioQuery.Parameters.Add(new SqlParameter("@descricaoTipoLivro", aoTipoLivro.til_ds_descricao));
                     liQtdLinhasAtualizadas = ioQuery.ExecuteNonQuery();
                 }
-                catch
+                catch (SqlException sqlEx)
                 {
-                    throw new Exception("Erro ao tentar atualizar informações do editor.");
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
                 }
             }
             return liQtdLinhasAtualizadas;

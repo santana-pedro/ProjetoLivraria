@@ -28,6 +28,11 @@ namespace ProjetoLivraria.Livraria
                 ViewState["ViewStateListaEditores"] = value;
             }
         }
+        public Editores EditorSessao
+        {
+            get { return (Editores)Session["SessionEditorSelecionado"]; }
+            set { Session["SessionEditorSelecionado"] = value; }
+        }
         private void CarregaDados()
         {
             try
@@ -116,6 +121,20 @@ namespace ProjetoLivraria.Livraria
             this.ioEditoresDAO.RemoveEditor(editorId);
             e.Cancel = true;
             this.CarregaDados();
+        }
+        protected void gvGerenciamentoEditores_CustomButtonCallback(object sender, DevExpress.Web.ASPxGridViewCustomButtonCallbackEventArgs e)
+        {
+            decimal editorId = Convert.ToDecimal(gvGerenciamentoEditores.GetRowValues(e.VisibleIndex, "edi_id_editor"));
+            var editor = ioEditoresDAO.BuscarEditores(editorId).FirstOrDefault();
+            if (e.ButtonID == "btnAutorInfo")
+            {
+            }
+            else if (e.ButtonID == "btnLivros")
+            {
+                Session["SessionEditorSelecionado"] = editor;
+
+                gvGerenciamentoEditores.JSProperties["cpRedirectionToLivros"] = true;
+            }
         }
     }
 }

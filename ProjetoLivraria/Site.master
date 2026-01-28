@@ -16,7 +16,7 @@
                     <items>
                         <dx:MenuItem Text="Autores" NavigateUrl='/Livraria/GerenciamentoAutores.aspx' />
                         <dx:MenuItem Text="Livros" NavigateUrl='/Livraria/GerenciamentoLivros.aspx' />
-                        <dx:MenuItem Text="Categorias" />
+                        <dx:MenuItem Text="Categorias" NavigateUrl='/Livraria/GerenciamentoCategorias.aspx'/>
                         <dx:MenuItem Text="Editores" NavigateUrl='/Livraria/GerenciamentoEditores.aspx'/>
                     </items>
                     <border borderwidth="0px" />

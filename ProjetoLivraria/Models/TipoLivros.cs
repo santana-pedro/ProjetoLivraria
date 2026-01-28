@@ -2,6 +2,7 @@
 
 namespace ProjetoLivraria.Models
 {
+    [Serializable]
     public class TipoLivros
     {
         public decimal til_id_tipo_livro { get; set; }
