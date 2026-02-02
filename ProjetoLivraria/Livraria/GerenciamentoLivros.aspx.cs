@@ -38,6 +38,8 @@ namespace ProjetoLivraria.Livraria
                 TipoLivros loTipoLivroFiltro = Session["SessionTipoLivroSelecionado"] as TipoLivros;
 
                 LivroAutorDAO ioLivroAutorDAO = new LivroAutorDAO();
+                EditoresDAO ioEditorDAO = new EditoresDAO();
+                TipoLivrosDAO ioTipoLivroDAO = new TipoLivrosDAO();
 
                 if (loAutorFiltro != null)
                 {
@@ -46,12 +48,12 @@ namespace ProjetoLivraria.Livraria
                 }
                 if(loEditorFiltro != null)
                 {
-                    this.ListaLivros = ioLivroAutorDAO.BuscarLivrosDeEditor(loEditorFiltro.edi_id_editor);
+                    this.ListaLivros = ioEditorDAO.BuscarLivrosDeEditor(loEditorFiltro.edi_id_editor);
                     Session["SessionEditorSelecionado"] = null;
                 }
                 if(loTipoLivroFiltro != null)
                 {
-                    this.ListaLivros = ioLivroAutorDAO.BuscarLivrosDeTipo(loTipoLivroFiltro.til_id_tipo_livro);
+                    this.ListaLivros = ioTipoLivroDAO.BuscarLivrosDeTipo(loTipoLivroFiltro.til_id_tipo_livro);
                     Session["SessionTipoLivroSelecionado"] = null;
                 }
                 if(loTipoLivroFiltro == null && loEditorFiltro == null && loAutorFiltro == null)
@@ -124,7 +126,7 @@ namespace ProjetoLivraria.Livraria
             }
             catch (SqlException sqlEx)
             {
-                HttpContext.Current.Response.Write("<script>alert('Houve um erro ao tentar cadastrar  o livro!');</script>" + sqlEx.Message);
+                throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
             }
             this.cmbCadastroTipoLivro.Value = String.Empty;
             this.cmbCadastroIdEditorLivro.Value = String.Empty;
@@ -141,14 +143,35 @@ namespace ProjetoLivraria.Livraria
             try
             {
                 decimal ldcIdLivro = Convert.ToDecimal(e.Keys["liv_id_livro"]);
-                decimal ldcIdTipoLivro = Convert.ToDecimal(e.NewValues["liv_id_tipo_livro"]);
-                decimal ldcIdEditor = Convert.ToDecimal(e.NewValues["liv_id_editor"]);
-                string lcsTitulo = Convert.ToString(e.NewValues["liv_titulo"]);
-                double ldcPreco = Convert.ToDouble(e.NewValues["liv_preco"]);
-                double ldcRoyalty = Convert.ToDouble(e.NewValues["liv_royalty"]);
-                string lcsResumo = Convert.ToString(e.NewValues["liv_resumo"]);
-                int lniEdicao = Convert.ToInt32(e.NewValues["liv_edicao"]);
+                Livros loLivroExistente = this.ioLivrosDAO.BuscarLivros(ldcIdLivro).FirstOrDefault();
+                decimal ldcIdTipoLivro, ldcIdEditor;
+                string lcsTitulo, lcsResumo;
+                double ldcPreco, ldcRoyalty;
+                int lniEdicao;
+
+                if (e.NewValues["liv_id_tipo_livro"] != null) ldcIdTipoLivro = Convert.ToDecimal(e.NewValues["liv_id_tipo_livro"]);
+                else ldcIdTipoLivro = loLivroExistente.liv_id_tipo_livro;
+
+                if (e.NewValues["liv_id_editor"] != null) ldcIdEditor = Convert.ToDecimal(e.NewValues["liv_id_editor"]);
+                else ldcIdEditor = loLivroExistente.liv_id_editor;
+
+                if (e.NewValues["liv_nm_titulo"] != null) lcsTitulo = Convert.ToString(e.NewValues["liv_nm_titulo"]);
+                else lcsTitulo = loLivroExistente.liv_nm_titulo;
+
+                if (e.NewValues["liv_vl_preco"] != null) ldcPreco = Convert.ToDouble(e.NewValues["liv_vl_preco"]);
+                else ldcPreco = loLivroExistente.liv_vl_preco;
+
+                if (e.NewValues["liv_pc_royalty"] != null) ldcRoyalty = Convert.ToDouble(e.NewValues["liv_pc_royalty"]);
+                else ldcRoyalty = loLivroExistente.liv_pc_royalty;
+
+                if (e.NewValues["liv_ds_resumo"] != null) lcsResumo = Convert.ToString(e.NewValues["liv_ds_resumo"]);
+                else lcsResumo = loLivroExistente.liv_ds_resumo;
+
+                if (e.NewValues["liv_nu_edicao"] != null) lniEdicao = Convert.ToInt32(e.NewValues["liv_nu_edicao"]);
+                else lniEdicao = loLivroExistente.liv_nu_edicao;
+
                 Livros loLivro = new Livros(ldcIdLivro, ldcIdTipoLivro, ldcIdEditor, lcsTitulo, ldcPreco, ldcRoyalty, lcsResumo, lniEdicao);
+
                 this.ioLivrosDAO.AtualizaLivro(loLivro);
                 this.CarregaDados();
                 e.Cancel = true;
@@ -163,13 +186,18 @@ namespace ProjetoLivraria.Livraria
             try
             {
                 decimal ldcIdLivro = Convert.ToDecimal(e.Keys["liv_id_livro"]);
+
+                Livros livroAtual = this.ioLivrosDAO.BuscarLivros(ldcIdLivro).FirstOrDefault();
+                LivroAutorDAO ioLivroAutorDAO = new LivroAutorDAO();
+                LivroAutor loLivroAutor = ioLivroAutorDAO.BuscarLivroAutor(ldcIdLivro).FirstOrDefault();
                 this.ioLivrosDAO.RemoveLivro(ldcIdLivro);
                 this.CarregaDados();
                 e.Cancel = true;
+                    
             }
-            catch (Exception ex)
+            catch (SqlException sqlEx)
             {
-                throw new Exception("Erro ao excluir livro: " + ex.Message);
+                throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
             }
         }
         protected void gvGerenciamentoLivros_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)

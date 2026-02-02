@@ -1,4 +1,5 @@
-﻿using DevExpress.Web.Data;
+﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using ProjetoLivraria.DAO;
 using ProjetoLivraria.Models;
 using System;
@@ -81,25 +82,18 @@ namespace ProjetoLivraria.Livraria
             try
             {
                 decimal autorId = Convert.ToDecimal(e.Keys["aut_id_autor"]);
-                string nome = e.NewValues["aut_nm_nome"].ToString();
-                string sobrenome = e.NewValues["aut_nm_sobrenome"].ToString();
-                string email = e.NewValues["aut_ds_email"].ToString();
+                string nome, sobrenome, email;
 
-                if (string.IsNullOrEmpty(nome))
-                {
-                    ShowMessage("Informe o nome o autor");
-                    return;
-                }
-                else if (string.IsNullOrEmpty(sobrenome))
-                {
-                    ShowMessage("Informe o sobrenome o autor");
-                    return;
-                }
-                else if (string.IsNullOrEmpty(email))
-                {
-                    ShowMessage("Informe o email o autor");
-                    return;
-                }
+                AutoresDAO autoresDAO = new AutoresDAO();
+                Autores autorExistente = autoresDAO.BuscarAutores(autorId).FirstOrDefault();
+
+                if(e.NewValues["aut_nm_nome"] != null) nome = e.NewValues["aut_nm_nome"].ToString();
+                else nome = autorExistente.aut_nm_nome;
+                if(e.NewValues["aut_nm_sobrenome"] != null) sobrenome = e.NewValues["aut_nm_sobrenome"].ToString();
+                else sobrenome = autorExistente.aut_nm_sobrenome;
+                if(e.NewValues["aut_ds_email"] != null) email = e.NewValues["aut_ds_email"].ToString();
+                else email = autorExistente.aut_ds_email;
+
 
                 Autores autor = new Autores(autorId, nome, sobrenome, email);
 
@@ -118,10 +112,21 @@ namespace ProjetoLivraria.Livraria
         protected void gvGerenciamentoAutores_RowDeleting(object sender, ASPxDataDeletingEventArgs e)
         {
             decimal autorId = Convert.ToDecimal(e.Keys["aut_id_autor"]);
-            BindingList<Autores> autorDelete = this.ioAutoresDAO.BuscarAutores(autorId);
-            this.ioAutoresDAO.RemoveAutor(autorDelete.FirstOrDefault());
-            e.Cancel = true;
-            this.CarregaDados();
+            LivroAutorDAO livroAutorDAO = new LivroAutorDAO();
+            LivroAutor livroAutor = livroAutorDAO.BuscarLivroAutor(autorId).FirstOrDefault();
+
+            if (livroAutor != null)
+            {
+                ASPxGridView grid = (ASPxGridView)sender;
+                grid.JSProperties["cpMensagemErro"] = "Não é possível excluir o autor, pois está associado a um ou mais livros.";
+                e.Cancel = true;
+                this.CarregaDados();
+            }
+            else { 
+                this.ioAutoresDAO.RemoveAutor(autorId);
+                e.Cancel = true;
+                this.CarregaDados();
+            }
         }
         protected void gvGerenciamentoAutores_CustomButtonCallback(object sender, DevExpress.Web.ASPxGridViewCustomButtonCallbackEventArgs e)
         {

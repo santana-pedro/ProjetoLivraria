@@ -1,7 +1,9 @@
-﻿using DevExpress.Web.Data;
+﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using ProjetoLivraria.DAO;
 using ProjetoLivraria.Models;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
@@ -58,7 +60,7 @@ namespace ProjetoLivraria.Livraria
                 string lsNomeEditor = this.tbxCadastroNomeEditor.Text;
                 string lsUrlEditor = this.tbxCadastroUrlEditor.Text;
                 string lsEmailEditor = this.tbxCadastroEmailEditor.Text;
-                Editores loEditor = new Editores(ldcIdEditor, lsNomeEditor, lsUrlEditor, lsEmailEditor);
+                Editores loEditor = new Editores(ldcIdEditor, lsNomeEditor, lsEmailEditor, lsUrlEditor);
                 this.ioEditoresDAO.InsereEditor(loEditor);
                 this.CarregaDados();
                 HttpContext.Current.Response.Write("<script>alert('Editor cadastrado com sucesso!');</script>");
@@ -71,35 +73,20 @@ namespace ProjetoLivraria.Livraria
             this.tbxCadastroUrlEditor.Text = String.Empty;
             this.tbxCadastroEmailEditor.Text = String.Empty;
         }
-        private void ShowMessage(string message)
-        {
-            string script = $"alert('{message}');";
-            ScriptManager.RegisterStartupScript(this, GetType(), "ServerControlScript", script, true);
-        }
         protected void gvGerenciamentoEditores_RowUpdating(object sender, ASPxDataUpdatingEventArgs e)
         {
             try
             {
                 decimal editorId = Convert.ToDecimal(e.Keys["edi_id_editor"]);
-                string nome = e.NewValues["edi_nm_nome"].ToString();
-                string email = e.NewValues["edi_ds_email"].ToString();
-                string url = e.NewValues["edi_ds_url"].ToString();
+                string nome, email, url;
+                Editores editorExistente = this.ioEditoresDAO.BuscarEditores(editorId).FirstOrDefault();
 
-                if (string.IsNullOrEmpty(nome))
-                {
-                    ShowMessage("Informe o nome do editor");
-                    return;
-                }
-                else if (string.IsNullOrEmpty(email))
-                {
-                    ShowMessage("Informe o email do editor");
-                    return;
-                }
-                else if (string.IsNullOrEmpty(url))
-                {
-                    ShowMessage("Informe a url do editor");
-                    return;
-                }
+                if (e.NewValues["edi_nm_nome"] != null) nome = e.NewValues["edi_nm_nome"].ToString();
+                else nome = editorExistente.edi_nm_nome;
+                if(e.NewValues["edi_ds_email"] != null) email = e.NewValues["edi_ds_email"].ToString();
+                else email = editorExistente.edi_ds_email;
+                if(e.NewValues["edi_ds_url"] != null) url = e.NewValues["edi_ds_url"].ToString();
+                else url = editorExistente.edi_ds_url;
 
                 Editores editor = new Editores(editorId, nome, email, url);
 
@@ -117,19 +104,35 @@ namespace ProjetoLivraria.Livraria
         }
         protected void gvGerenciamentoEditores_RowDeleting(object sender, ASPxDataDeletingEventArgs e)
         {
-            decimal editorId = Convert.ToDecimal(e.Keys["edi_id_editor"]);
-            this.ioEditoresDAO.RemoveEditor(editorId);
-            e.Cancel = true;
-            this.CarregaDados();
+            try
+            {
+                decimal editorId = Convert.ToDecimal(e.Keys["edi_id_editor"]);
+                Livros livrosEditores = this.ioEditoresDAO.BuscarLivrosDeEditor(editorId).FirstOrDefault();
+
+                if (livrosEditores != null)
+                {
+                    ASPxGridView grid = (ASPxGridView)sender;
+                    grid.JSProperties["cpMensagemErro"] = "Não é possível excluir o editor, pois está associado a um ou mais livros.";
+                    e.Cancel = true;
+                    this.CarregaDados();
+                }
+                else{ 
+                    this.ioEditoresDAO.RemoveEditor(editorId);
+                    e.Cancel = true;
+                    this.CarregaDados();
+                }
+                
+            }
+            catch (SqlException sqlEx)
+            {
+                throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
+            }
         }
         protected void gvGerenciamentoEditores_CustomButtonCallback(object sender, DevExpress.Web.ASPxGridViewCustomButtonCallbackEventArgs e)
         {
             decimal editorId = Convert.ToDecimal(gvGerenciamentoEditores.GetRowValues(e.VisibleIndex, "edi_id_editor"));
             var editor = ioEditoresDAO.BuscarEditores(editorId).FirstOrDefault();
-            if (e.ButtonID == "btnAutorInfo")
-            {
-            }
-            else if (e.ButtonID == "btnLivros")
+            if (e.ButtonID == "btnLivros")
             {
                 Session["SessionEditorSelecionado"] = editor;
 

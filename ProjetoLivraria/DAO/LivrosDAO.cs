@@ -102,10 +102,10 @@ namespace ProjetoLivraria.DAO
                 try
                 {
                     ioConexao.Open(); 
-                    ioQuery = new SqlCommand("UPDATE LIV_LIVROS SET LIV_NM_TITULO = @tituloLivro, LIV_VL_PRECO = @precoLivro, LIV_PC_ROYALTY = @royaltyLivro, LIV_DS_RESUMO = @resumoLivro, LIV_NU_EDICAO = @edicaoLivro WHERE LIV_ID_LIVRO = @idLivro", ioConexao);
+                    ioQuery = new SqlCommand("UPDATE LIV_LIVROS SET LIV_ID_EDITOR = @idEditor, LIV_ID_TIPO_LIVRO = @idTipoLivro, LIV_NM_TITULO = @tituloLivro, LIV_VL_PRECO = @precoLivro, LIV_PC_ROYALTY = @royaltyLivro, LIV_DS_RESUMO = @resumoLivro, LIV_NU_EDICAO = @edicaoLivro WHERE LIV_ID_LIVRO = @idLivro", ioConexao);
                     ioQuery.Parameters.Add(new SqlParameter("@idLivro", aoLivro.liv_id_livro));
-                    ioQuery.Parameters.Add(new SqlParameter("@idTipoLivro", aoLivro.liv_id_tipo_livro));
                     ioQuery.Parameters.Add(new SqlParameter("@idEditor", aoLivro.liv_id_editor));
+                    ioQuery.Parameters.Add(new SqlParameter("@idTipoLivro", aoLivro.liv_id_tipo_livro));
                     ioQuery.Parameters.Add(new SqlParameter("@tituloLivro", aoLivro.liv_nm_titulo));
                     ioQuery.Parameters.Add(new SqlParameter("@precoLivro", aoLivro.liv_vl_preco));
                     ioQuery.Parameters.Add(new SqlParameter("@royaltyLivro", aoLivro.liv_pc_royalty));

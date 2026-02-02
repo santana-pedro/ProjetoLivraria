@@ -47,6 +47,35 @@ namespace ProjetoLivraria.DAO
             }
             return loListTipoLivros;
         }
+        public BindingList<Livros> BuscarLivrosDeTipo(decimal idTipoLivro)
+        {
+            BindingList<Livros> loListLivrosDeAutor = new BindingList<Livros>();
+            using (ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            {
+                try
+                {
+                    ioConexao.Open();
+
+                    ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS WHERE LIV_ID_TIPO_LIVRO = @idTipoLivro", ioConexao);
+                    ioQuery.Parameters.AddWithValue("@idTipoLivro", idTipoLivro);
+
+                    using (SqlDataReader loReader = ioQuery.ExecuteReader())
+                    {
+                        while (loReader.Read())
+                        {
+                            Livros loNovoLivro = new Livros(Convert.ToDecimal(loReader["LIV_ID_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_TIPO_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_EDITOR"]), loReader["LIV_NM_TITULO"]?.ToString() ?? "", Convert.ToDouble(loReader["LIV_VL_PRECO"]), Convert.ToDouble(loReader["LIV_PC_ROYALTY"]), loReader["LIV_DS_RESUMO"]?.ToString() ?? "", Convert.ToInt32(loReader["LIV_NU_EDICAO"]), null);
+                            loListLivrosDeAutor.Add(loNovoLivro);
+                        }
+                        loReader.Close();
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    throw new Exception("Erro no SQL (Código " + sqlEx.Number + "): " + sqlEx.Message);
+                }
+            }
+            return loListLivrosDeAutor;
+        }
         public int InsereTipoLivro(TipoLivros aoNovoTipoLivro)
         {
             if (aoNovoTipoLivro == null) throw new NullReferenceException();

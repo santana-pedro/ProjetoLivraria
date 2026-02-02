@@ -66,6 +66,10 @@
                 delete s.cpRedirectionToLivros;
                 window.location.href = '/Livraria/GerenciamentoLivros.aspx'
             }
+            if (s.cpMensagemErro) {
+                alert(s.cpMensagemErro);
+                delete s.cpMensagemErro;
+            }
         }
     </script>
     <dx:ASPxGridView ID="gvGerenciamentoAutores" runat="server" ShowInsert="True" AllowEditing="True" Width="100%" KeyFieldName="aut_id_autor"
@@ -83,7 +87,6 @@
             <dx:GridViewCommandColumn ShowEditButton="True" ShowDeleteButton="True">
                 <CustomButtons>
                     <dx:GridViewCommandColumnCustomButton ID="btnLivros" Text="Livros"/>
-                    <dx:GridViewCommandColumnCustomButton ID="btnAutorInfo" Text="Informação"/>
                 </CustomButtons>
             </dx:GridViewCommandColumn>
         </Columns>

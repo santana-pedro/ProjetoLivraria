@@ -1,4 +1,5 @@
-﻿using DevExpress.Web.Data;
+﻿using DevExpress.Web;
+using DevExpress.Web.Data;
 using ProjetoLivraria.DAO;
 using ProjetoLivraria.Models;
 using System;
@@ -79,13 +80,13 @@ namespace ProjetoLivraria.Livraria
             try
             {
                 decimal tipoLivroId = Convert.ToDecimal(e.Keys["til_id_tipo_livro"]);
-                string descricao = e.NewValues["til_ds_descricao"].ToString();
+                string descricao;
 
-                if (string.IsNullOrEmpty(descricao))
-                {
-                    ShowMessage("Informe a descricao da categoria");
-                    return;
-                }
+                TipoLivrosDAO tipoLivrosDAO = new TipoLivrosDAO();
+                TipoLivros tipoLivroExistente = tipoLivrosDAO.BuscarTipoLivro(tipoLivroId).FirstOrDefault();
+                
+                if (e.NewValues["til_ds_descricao"] != null) descricao = e.NewValues["til_ds_descricao"].ToString();
+                else descricao = tipoLivroExistente.til_ds_descricao;
 
                 TipoLivros tipoLivros = new TipoLivros(tipoLivroId, descricao);
 
@@ -104,9 +105,20 @@ namespace ProjetoLivraria.Livraria
         protected void gvGerenciamentoCategorias_RowDeleting(object sender, ASPxDataDeletingEventArgs e)
         {
             decimal tipoLivroId = Convert.ToDecimal(e.Keys["til_id_tipo_livro"]);
-            this.ioTipoLivrosDAO.RemoveTipoLivro(tipoLivroId);
-            e.Cancel = true;
-            this.CarregaDados();
+            Livros livrosTipoLivros = this.ioTipoLivrosDAO.BuscarLivrosDeTipo(tipoLivroId).FirstOrDefault();
+
+            if(livrosTipoLivros != null)
+            {
+                ASPxGridView grid = (ASPxGridView)sender;
+                grid.JSProperties["cpMensagemErro"] = "Não é possível excluir a categoria, pois está associada a um ou mais livros.";
+                e.Cancel = true;
+                this.CarregaDados();
+            }
+            else { 
+                this.ioTipoLivrosDAO.RemoveTipoLivro(tipoLivroId);
+                e.Cancel = true;
+                this.CarregaDados();
+            }
         }
         protected void gvGerenciamentoCategorias_CustomButtonCallback(object sender, DevExpress.Web.ASPxGridViewCustomButtonCallbackEventArgs e)
         {

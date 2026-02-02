@@ -26,6 +26,7 @@
                                 <dx:ASPxTextBox ID="tbxCadastroUrlEditor" runat="server" Width="100%">
                                     <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
                                         <RequiredField IsRequired="true" ErrorText="Digite a URL do Editor!" />
+                                        <RegularExpression ErrorText="Url inválida" ValidationExpression="(https?://)?(www\.)?[\w-]+(\.[\w-]+)*\.com(\.br)?" />
                                     </ValidationSettings>
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
@@ -60,18 +61,22 @@
         </Items>
     </dx:ASPxFormLayout>
     <script type:"text/javascript">
-    function OnEndCallback(s, e) {
-        if (s.cpRedirectionToLivros) {
-            delete s.cpRedirectionToLivros;
-            window.location.href = '/Livraria/GerenciamentoLivros.aspx'
+        function OnEndCallback(s, e) {
+            if (s.cpRedirectionToLivros) {
+                delete s.cpRedirectionToLivros;
+                window.location.href = '/Livraria/GerenciamentoLivros.aspx'
+            }
+            if (s.cpMensagemErro) {
+                alert(s.cpMensagemErro);
+                delete s.cpMensagemErro;
+            }
         }
-    }
     </script>
     <dx:ASPxGridView ID="gvGerenciamentoEditores" runat="server" Width="100%" AllowEditing="True" KeyFieldName="edi_id_editor" Theme="Office365" CssClass="gridStyle" OnRowUpdating="gvGerenciamentoEditores_RowUpdating" OnRowDeleting="gvGerenciamentoEditores_RowDeleting" OnCustomButtonCallback="gvGerenciamentoEditores_CustomButtonCallback">
         <ClientSideEvents EndCallback="OnEndCallback" />
         <Columns>
             <dx:GridViewDataTextColumn FieldName="edi_id_editor" Caption="Id" Visible="false" />
-            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="15" FieldName="edi_nm_nome" Caption="Nome" />
+            <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="30" FieldName="edi_nm_nome" Caption="Nome" />
             <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="50" FieldName="edi_ds_email" Caption="Email" />
             <dx:GridViewDataTextColumn PropertiesTextEdit-MaxLength="50" FieldName="edi_ds_url" Caption="URL" />
 

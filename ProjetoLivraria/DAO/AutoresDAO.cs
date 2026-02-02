@@ -68,14 +68,13 @@ namespace ProjetoLivraria.DAO
             } 
             return liQtdRegistrosInseridos; 
         }
-        public int RemoveAutor(Autores aoAutor) { 
-            if (aoAutor == null) throw new NullReferenceException(); 
+        public int RemoveAutor(decimal aoIdAutor) { 
             int liQtdRegistrosExcluidos = 0; 
             using (SqlConnection ioConexao = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString)) { 
                 try { 
                     ioConexao.Open(); 
                     ioQuery = new SqlCommand("DELETE FROM AUT_AUTORES WHERE AUT_ID_AUTOR = @idAutor", ioConexao); 
-                    ioQuery.Parameters.Add(new SqlParameter("@idAutor", aoAutor.aut_id_autor)); 
+                    ioQuery.Parameters.Add(new SqlParameter("@idAutor", aoIdAutor)); 
                     liQtdRegistrosExcluidos = ioQuery.ExecuteNonQuery(); 
                 } catch { 
                     throw new Exception("Erro ao tentar excluir autor."); 
@@ -90,9 +89,11 @@ namespace ProjetoLivraria.DAO
                 try { 
                     ioConexao.Open(); 
                     ioQuery = new SqlCommand("UPDATE AUT_AUTORES SET AUT_NM_NOME = @nomeAutor, AUT_NM_SOBRENOME = @sobrenomeAutor, AUT_DS_EMAIL = @emailAutor WHERE AUT_ID_AUTOR = @idAutor", ioConexao); 
+                    ioQuery.Parameters.Add(new SqlParameter("@idAutor", aoAutor.aut_id_autor));
                     ioQuery.Parameters.Add(new SqlParameter("@nomeAutor", aoAutor.aut_nm_nome)); 
                     ioQuery.Parameters.Add(new SqlParameter("@sobrenomeAutor", aoAutor.aut_nm_sobrenome)); 
-                    ioQuery.Parameters.Add(new SqlParameter("@emailAutor", aoAutor.aut_ds_email)); liQtdLinhasAtualizadas = ioQuery.ExecuteNonQuery(); 
+                    ioQuery.Parameters.Add(new SqlParameter("@emailAutor", aoAutor.aut_ds_email)); 
+                    liQtdLinhasAtualizadas = ioQuery.ExecuteNonQuery(); 
                 } catch { 
                     throw new Exception("Erro ao tentar atualizar informações do autor."); 
                 } 

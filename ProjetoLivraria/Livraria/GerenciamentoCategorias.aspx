@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <dx:ASPxFormLayout ID="ASPxFormLayoutPrincipal" runat="server" Width="50%" Theme="Office365">
         <Items>
-            <dx:LayoutGroup Caption="Cadastro de Autor" ColCount="2" SettingsItemCaptions-Location="Top">
+            <dx:LayoutGroup Caption="Cadastro de Categoria" ColCount="2" SettingsItemCaptions-Location="Top">
                 <Items>
                     <%-- Campo Descrição --%>
                     <dx:LayoutItem Caption="Descricao">
@@ -30,12 +30,16 @@
         </Items>
     </dx:ASPxFormLayout>
     <script type:"text/javascript">
-    function OnEndCallback(s, e) {
-        if (s.cpRedirectionToLivros) {
-            delete s.cpRedirectionToLivros;
-            window.location.href = '/Livraria/GerenciamentoLivros.aspx'
+        function OnEndCallback(s, e) {
+            if (s.cpRedirectionToLivros) {
+                delete s.cpRedirectionToLivros;
+                window.location.href = '/Livraria/GerenciamentoLivros.aspx'
+            }
+            if (s.cpMensagemErro) {
+                alert(s.cpMensagemErro);
+                delete s.cpMensagemErro;
+            }
         }
-    }
     </script>
     <dx:ASPxGridView ID="gvGerenciamentoCategorias" runat="server" ShowInsert="True" AllowEditing="True" Width="100%" KeyFieldName="til_id_tipo_livro" OnRowUpdating="gvGerenciamentoCategorias_RowUpdating" OnRowDeleting="gvGerenciamentoCategorias_RowDeleting" OnCustomButtonCallback="gvGerenciamentoCategorias_CustomButtonCallback">
         <ClientSideEvents EndCallback="OnEndCallback" />
