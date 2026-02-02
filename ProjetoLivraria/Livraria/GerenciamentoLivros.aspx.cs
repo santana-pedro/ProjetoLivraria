@@ -216,5 +216,21 @@ namespace ProjetoLivraria.Livraria
                 combo.DataBind();
             }
         }
+        protected void gvGerenciamentoLivros_AutoFilterCellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
+        {
+            if (e.Column.FieldName == "liv_id_tipo_livro")
+            {
+                ASPxComboBox combo = e.Editor as ASPxComboBox;
+
+                combo.DataSource = new TipoLivrosDAO().BuscarTipoLivro();
+                combo.DataBind();
+            }
+            if (e.Column.FieldName == "liv_id_editor")
+            {
+                ASPxComboBox combo = e.Editor as ASPxComboBox;
+                combo.DataSource = new EditoresDAO().BuscarEditores();
+                combo.DataBind();
+            }
+        }
     }
 }

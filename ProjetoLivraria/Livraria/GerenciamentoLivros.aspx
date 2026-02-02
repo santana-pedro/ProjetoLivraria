@@ -42,7 +42,6 @@
                     </dx:LayoutItem>
                     <%-- Campo Titulo --%>
                     <dx:LayoutItem Caption="Título">
-                        <ParentContainerStyle Paddings-PaddingRight="12"></ParentContainerStyle>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
                                 <dx:ASPxTextBox ID="tbxCadastroTituloLivro" runat="server" Width="100%">
@@ -55,7 +54,6 @@
                     </dx:LayoutItem>
                     <%-- Campo Preco --%>
                     <dx:LayoutItem Caption="Preço">
-                        <ParentContainerStyle Paddings-PaddingLeft="0" Paddings-PaddingRight="12"></ParentContainerStyle>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
                                 <dx:ASPxTextBox ID="tbxCadastroPrecoLivro" runat="server" Width="100%">
@@ -69,7 +67,6 @@
                     </dx:LayoutItem>
                     <%-- Campo Royalty --%>
                     <dx:LayoutItem Caption="Royalty (%)">
-                        <ParentContainerStyle Paddings-PaddingRight="12"></ParentContainerStyle>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
                                 <dx:ASPxTextBox ID="tbxCadastroRoyaltyLivro" runat="server" Width="100%">
@@ -83,7 +80,6 @@
                     </dx:LayoutItem>
                     <%-- Campo Edicao Livro --%>
                     <dx:LayoutItem Caption="Edição Livro">
-                        <ParentContainerStyle Paddings-PaddingLeft="0" Paddings-PaddingRight="5"></ParentContainerStyle>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
                                 <dx:ASPxTextBox ID="tbxCadastroEdicaoLivro" runat="server" Width="100%">
@@ -117,7 +113,7 @@
         </Items>
     </dx:ASPxFormLayout>
     <%-- GRID --%>
-    <dx:ASPxGridView ID="gvGerenciamentoLivros" runat="server" Width="100%" AllowEditing="True" KeyFieldName="liv_id_livro" Theme="Office365" CssClass="gridStyle" OnRowUpdating="gvGerenciamentoLivros_RowUpdating" OnRowDeleting="gvGerenciamentoLivros_RowDeleting" OnCellEditorInitialize="gvGerenciamentoLivros_CellEditorInitialize">
+    <dx:ASPxGridView ID="gvGerenciamentoLivros" runat="server" Width="100%" AllowEditing="True" KeyFieldName="liv_id_livro" Theme="Office365" CssClass="gridStyle" OnRowUpdating="gvGerenciamentoLivros_RowUpdating" OnRowDeleting="gvGerenciamentoLivros_RowDeleting" OnCellEditorInitialize="gvGerenciamentoLivros_CellEditorInitialize" OnAutoFilterCellEditorInitialize="gvGerenciamentoLivros_AutoFilterCellEditorInitialize">
         <Columns>
             <dx:GridViewDataTextColumn FieldName="liv_id_livro" VisibleIndex="0" Caption="ID Livro" ReadOnly="True" Visible="false">
             </dx:GridViewDataTextColumn>
@@ -155,7 +151,7 @@
             <dx:GridViewCommandColumn ShowEditButton="True" ShowDeleteButton="True">
             </dx:GridViewCommandColumn>
         </Columns>
-        <Settings ShowFilterRow="False" ShowGroupPanel="True" />
+        <Settings ShowFilterRow="True" ShowGroupPanel="True" />
         <SettingsEditing Mode="Batch" />
     </dx:ASPxGridView>
 </asp:Content>

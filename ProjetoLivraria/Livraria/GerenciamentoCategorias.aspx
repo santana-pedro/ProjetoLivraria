@@ -53,6 +53,7 @@
                 </CustomButtons>
             </dx:GridViewCommandColumn>
         </Columns>
+        <Settings ShowFilterRow="False" ShowGroupPanel="True" />
         <SettingsEditing Mode="Batch" />
     </dx:ASPxGridView>
 </asp:Content>
