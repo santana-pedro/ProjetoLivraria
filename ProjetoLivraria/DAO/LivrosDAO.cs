@@ -22,19 +22,18 @@ namespace ProjetoLivraria.DAO
                     ioConexao.Open();
                     if (idLivro != null)
                     {
-                        ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS WHERE LIV_ID_LIVRO = @idLivro", ioConexao);
+                        ioQuery = new SqlCommand("SELECT L.*, LIA.LIA_ID_AUTOR AS LIA_ID_AUTOR FROM LIV_LIVROS AS L INNER JOIN LIA_LIVRO_AUTOR AS LIA ON L.LIV_ID_LIVRO = LIA.LIA_ID_LIVRO WHERE LIV_ID_LIVRO = @idLivro", ioConexao);
                         ioQuery.Parameters.AddWithValue("@idLivro", idLivro);
-
                     }
                     else
                     {
-                        ioQuery = new SqlCommand("SELECT * FROM LIV_LIVROS", ioConexao);
+                        ioQuery = new SqlCommand("SELECT L.*, LIA.LIA_ID_AUTOR FROM LIV_LIVROS AS L INNER JOIN LIA_LIVRO_AUTOR AS LIA ON L.LIV_ID_LIVRO = LIA.LIA_ID_LIVRO ", ioConexao);
                     }
                     using (SqlDataReader loReader = ioQuery.ExecuteReader())
                     {
                         while (loReader.Read())
                         {
-                            Livros loNovoLivro = new Livros(Convert.ToDecimal(loReader["LIV_ID_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_TIPO_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_EDITOR"]), loReader["LIV_NM_TITULO"]?.ToString() ?? "", Convert.ToDouble(loReader["LIV_VL_PRECO"]), Convert.ToDouble(loReader["LIV_PC_ROYALTY"]),loReader["LIV_DS_RESUMO"]?.ToString() ?? "", Convert.ToInt32(loReader["LIV_NU_EDICAO"]), null);
+                            Livros loNovoLivro = new Livros(Convert.ToDecimal(loReader["LIV_ID_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_TIPO_LIVRO"]), Convert.ToDecimal(loReader["LIV_ID_EDITOR"]), loReader["LIV_NM_TITULO"]?.ToString() ?? "", Convert.ToDouble(loReader["LIV_VL_PRECO"]), Convert.ToDouble(loReader["LIV_PC_ROYALTY"]),loReader["LIV_DS_RESUMO"]?.ToString() ?? "", Convert.ToInt32(loReader["LIV_NU_EDICAO"]), Convert.ToDecimal(loReader["LIA_ID_AUTOR"]), null);
                             loListLivros.Add(loNovoLivro);
                         }
                         loReader.Close();

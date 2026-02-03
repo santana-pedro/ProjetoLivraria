@@ -144,10 +144,18 @@ namespace ProjetoLivraria.Livraria
             {
                 decimal ldcIdLivro = Convert.ToDecimal(e.Keys["liv_id_livro"]);
                 Livros loLivroExistente = this.ioLivrosDAO.BuscarLivros(ldcIdLivro).FirstOrDefault();
+
+                decimal ldcIdAutor = Convert.ToDecimal(e.OldValues["liv_lia_livro_autor"]);
+                LivroAutor loLivroAutorExistente = new LivroAutorDAO().BuscarLivroAutor(ldcIdAutor).FirstOrDefault();
+                LivroAutorDAO livroAutorDAO = new LivroAutorDAO();
+
                 decimal ldcIdTipoLivro, ldcIdEditor;
                 string lcsTitulo, lcsResumo;
                 double ldcPreco, ldcRoyalty;
                 int lniEdicao;
+
+                if (e.NewValues["liv_lia_livro_autor"] != null) ldcIdAutor = Convert.ToDecimal(e.NewValues["liv_lia_livro_autor"]);
+                else ldcIdAutor = loLivroAutorExistente.lia_id_autor;
 
                 if (e.NewValues["liv_id_tipo_livro"] != null) ldcIdTipoLivro = Convert.ToDecimal(e.NewValues["liv_id_tipo_livro"]);
                 else ldcIdTipoLivro = loLivroExistente.liv_id_tipo_livro;
@@ -171,7 +179,9 @@ namespace ProjetoLivraria.Livraria
                 else lniEdicao = loLivroExistente.liv_nu_edicao;
 
                 Livros loLivro = new Livros(ldcIdLivro, ldcIdTipoLivro, ldcIdEditor, lcsTitulo, ldcPreco, ldcRoyalty, lcsResumo, lniEdicao);
+                LivroAutor loLivroAutor = new LivroAutor(ldcIdAutor, ldcIdLivro, ldcRoyalty);
 
+                livroAutorDAO.AtualizaLivroAutor(loLivroAutor);
                 this.ioLivrosDAO.AtualizaLivro(loLivro);
                 this.CarregaDados();
                 e.Cancel = true;
@@ -188,8 +198,6 @@ namespace ProjetoLivraria.Livraria
                 decimal ldcIdLivro = Convert.ToDecimal(e.Keys["liv_id_livro"]);
 
                 Livros livroAtual = this.ioLivrosDAO.BuscarLivros(ldcIdLivro).FirstOrDefault();
-                LivroAutorDAO ioLivroAutorDAO = new LivroAutorDAO();
-                LivroAutor loLivroAutor = ioLivroAutorDAO.BuscarLivroAutor(ldcIdLivro).FirstOrDefault();
                 this.ioLivrosDAO.RemoveLivro(ldcIdLivro);
                 this.CarregaDados();
                 e.Cancel = true;
@@ -202,6 +210,12 @@ namespace ProjetoLivraria.Livraria
         }
         protected void gvGerenciamentoLivros_CellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
         {
+            if (e.Column.FieldName == "liv_lia_livro_autor")
+            {
+                ASPxComboBox combo = e.Editor as ASPxComboBox;
+                combo.DataSource = new AutoresDAO().BuscarAutores();
+                combo.DataBind();
+            }
             if (e.Column.FieldName == "liv_id_tipo_livro")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
@@ -218,10 +232,15 @@ namespace ProjetoLivraria.Livraria
         }
         protected void gvGerenciamentoLivros_AutoFilterCellEditorInitialize(object sender, ASPxGridViewEditorEventArgs e)
         {
+            if (e.Column.FieldName == "liv_lia_livro_autor")
+            {
+                ASPxComboBox combo = e.Editor as ASPxComboBox;
+                combo.DataSource = new AutoresDAO().BuscarAutores();
+                combo.DataBind();
+            }
             if (e.Column.FieldName == "liv_id_tipo_livro")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
-
                 combo.DataSource = new TipoLivrosDAO().BuscarTipoLivro();
                 combo.DataBind();
             }

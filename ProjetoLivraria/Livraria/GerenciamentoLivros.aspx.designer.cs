@@ -66,7 +66,7 @@ namespace ProjetoLivraria.Livraria
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroPrecoLivro;
+        protected global::DevExpress.Web.ASPxSpinEdit tbxCadastroPrecoLivro;
 
         /// <summary>
         /// Controle tbxCadastroRoyaltyLivro.
@@ -75,7 +75,7 @@ namespace ProjetoLivraria.Livraria
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroRoyaltyLivro;
+        protected global::DevExpress.Web.ASPxSpinEdit tbxCadastroRoyaltyLivro;
 
         /// <summary>
         /// Controle tbxCadastroEdicaoLivro.
@@ -84,7 +84,7 @@ namespace ProjetoLivraria.Livraria
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxTextBox tbxCadastroEdicaoLivro;
+        protected global::DevExpress.Web.ASPxSpinEdit tbxCadastroEdicaoLivro;
 
         /// <summary>
         /// Controle tbxCadastroResumoLivro.

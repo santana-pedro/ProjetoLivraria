@@ -56,25 +56,24 @@
                     <dx:LayoutItem Caption="Preço">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxTextBox ID="tbxCadastroPrecoLivro" runat="server" Width="100%">
-                                    <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
-                                        <RequiredField IsRequired="true" ErrorText="Informe o preço do Livro!" />
-                                        <dx:RegularExpression ErrorText="Preço inválido (ex: 29,90)" ValidationExpression="^\d+([,.]\d{1,2})?$" />
+                                <dx:ASPxSpinEdit ID="tbxCadastroPrecoLivro" runat="server" Width="100%" MinValue="0" MaxValue="1000000" DisplayFormatString="C2" NumberType="Float">
+                                    <ValidationSettings ValidationGroup="MyGroup" Display="Dynamic">
+                                        <RequiredField IsRequired="true" ErrorText="Informe o preço!"/>
                                     </ValidationSettings>
-                                </dx:ASPxTextBox>
+                                </dx:ASPxSpinEdit>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
+
                     <%-- Campo Royalty --%>
                     <dx:LayoutItem Caption="Royalty (%)">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxTextBox ID="tbxCadastroRoyaltyLivro" runat="server" Width="100%">
-                                    <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
-                                        <RequiredField IsRequired="True" ErrorText="Informe o royalty do Livro!" />
-                                        <dx:RegularExpression ErrorText="Royalty inválido (0 a 100)" ValidationExpression="^100([,.]0{1,2})?$|^\d{1,2}([,.]\d{1,2})?$" />
+                                <dx:ASPxSpinEdit ID="tbxCadastroRoyaltyLivro" runat="server" Width="100%" MinValue="0" MaxValue="100" NumberType="Float">
+                                    <ValidationSettings ValidationGroup="MyGroup" Display="Dynamic">
+                                        <RequiredField IsRequired="true" ErrorText="Informe o royalty!" />
                                     </ValidationSettings>
-                                </dx:ASPxTextBox>
+                                </dx:ASPxSpinEdit>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
@@ -82,12 +81,11 @@
                     <dx:LayoutItem Caption="Edição Livro">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxTextBox ID="tbxCadastroEdicaoLivro" runat="server" Width="100%">
-                                    <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
-                                        <RequiredField IsRequired="true" ErrorText="Informe a edição do Livro!" />
-                                        <dx:RegularExpression ErrorText="Edição inválida (números inteiros)" ValidationExpression="^\d+$" />
+                                <dx:ASPxSpinEdit ID="tbxCadastroEdicaoLivro" runat="server" Width="100%" MinValue="0" MaxValue="10000" NumberType="Integer" AllowNull="false">
+                                    <ValidationSettings ValidationGroup="MyGroup" Display="Dynamic">
+                                        <RequiredField IsRequired="true" ErrorText="Informe a edição!" />
                                     </ValidationSettings>
-                                </dx:ASPxTextBox>
+                                </dx:ASPxSpinEdit>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
@@ -118,34 +116,45 @@
             <dx:GridViewDataTextColumn FieldName="liv_id_livro" VisibleIndex="0" Caption="ID Livro" ReadOnly="True" Visible="false">
             </dx:GridViewDataTextColumn>
 
-            <dx:GridViewDataComboBoxColumn FieldName="liv_id_tipo_livro" VisibleIndex="1" Caption="Categoria" Width="100px">
+            <dx:GridViewDataComboBoxColumn FieldName="liv_lia_livro_autor" VisibleIndex="1" Caption="Autor" Width="100px">
+                <PropertiesComboBox ValueField="aut_id_autor" TextField="aut_nm_nome" ValueType="System.Decimal">
+                </PropertiesComboBox>
+            </dx:GridViewDataComboBoxColumn>
+
+            <dx:GridViewDataComboBoxColumn FieldName="liv_id_tipo_livro" VisibleIndex="2" Caption="Categoria" Width="100px">
                 <PropertiesComboBox ValueField="til_id_tipo_livro" TextField="til_ds_descricao" ValueType="System.Decimal">
                 </PropertiesComboBox>
             </dx:GridViewDataComboBoxColumn>
 
-            <dx:GridViewDataComboBoxColumn FieldName="liv_id_editor" VisibleIndex="2" Caption="Editor" Width="100px">
+            <dx:GridViewDataComboBoxColumn FieldName="liv_id_editor" VisibleIndex="3" Caption="Editor" Width="100px">
                 <PropertiesComboBox ValueField="edi_id_editor" TextField="edi_nm_nome" ValueType="System.Decimal">
                 </PropertiesComboBox>
             </dx:GridViewDataComboBoxColumn>
 
-            <dx:GridViewDataTextColumn FieldName="liv_nm_titulo" PropertiesTextEdit-MaxLength="50" VisibleIndex="3" Caption="Título">
+            <dx:GridViewDataTextColumn FieldName="liv_nm_titulo" PropertiesTextEdit-MaxLength="50" VisibleIndex="4" Caption="Título">
             </dx:GridViewDataTextColumn>
 
-            <dx:GridViewDataTextColumn FieldName="liv_vl_preco" VisibleIndex="4" Caption="Preço" Width="30px">
-            </dx:GridViewDataTextColumn>
+            <dx:GridViewDataSpinEditColumn FieldName="liv_vl_preco" VisibleIndex="5" Caption="Preço" Width="80px">
+                <PropertiesSpinEdit MinValue="0" MaxValue="1000000000" DisplayFormatString="C2" NumberType="Float" AllowNull="false">
+                </PropertiesSpinEdit>
+            </dx:GridViewDataSpinEditColumn>
 
-            <dx:GridViewDataTextColumn FieldName="liv_pc_royalty" VisibleIndex="5" Caption="Royalty (%)" Width="30px">
-            </dx:GridViewDataTextColumn>
+            <dx:GridViewDataSpinEditColumn FieldName="liv_pc_royalty" VisibleIndex="6" Caption="Royalty (%)" Width="80px">
+                <PropertiesSpinEdit MinValue="0" MaxValue="100" NumberType="Float" AllowNull="false">
+                </PropertiesSpinEdit>
+            </dx:GridViewDataSpinEditColumn>
 
-            <dx:GridViewDataTextColumn FieldName="liv_ds_resumo" VisibleIndex="6" Caption="Resumo">
+            <dx:GridViewDataSpinEditColumn FieldName="liv_nu_edicao" VisibleIndex="7" Caption="Edição Livro" Width="80px">
+                <PropertiesSpinEdit MinValue="0" MaxValue="1000000000" NumberType="Integer" AllowNull="false">
+                </PropertiesSpinEdit>
+            </dx:GridViewDataSpinEditColumn>
+
+            <dx:GridViewDataTextColumn FieldName="liv_ds_resumo" VisibleIndex="8" Caption="Resumo">
                 <PropertiesTextEdit>
                     <ValidationSettings>
                         <RequiredField IsRequired="False" />
                     </ValidationSettings>
                 </PropertiesTextEdit>
-            </dx:GridViewDataTextColumn>
-
-            <dx:GridViewDataTextColumn FieldName="liv_nu_edicao" VisibleIndex="7" Caption="Edição Livro" Width="30px">
             </dx:GridViewDataTextColumn>
 
             <dx:GridViewCommandColumn ShowEditButton="True" ShowDeleteButton="True">

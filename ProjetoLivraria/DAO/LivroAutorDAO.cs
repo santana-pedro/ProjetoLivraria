@@ -34,7 +34,7 @@ namespace ProjetoLivraria.DAO
                     {
                         while (loReader.Read())
                         {
-                            LivroAutor loNovoLivroAutor = new LivroAutor(loReader.GetDecimal(0), loReader.GetDecimal(1), loReader.GetDouble(2));
+                            LivroAutor loNovoLivroAutor = new LivroAutor(Convert.ToDecimal(loReader["LIA_ID_AUTOR"]), Convert.ToDecimal(loReader["LIA_ID_LIVRO"]), Convert.ToDouble(loReader["LIA_PC_ROYALTY"]));
                             loListLivroAutor.Add(loNovoLivroAutor);
                         }
                         loReader.Close();
@@ -158,7 +158,7 @@ namespace ProjetoLivraria.DAO
                 try
                 {
                     ioConexao.Open();
-                    ioQuery = new SqlCommand("UPDATE LIA_LIVRO_AUTOR SET LIA_PC_ROYALTY = @royaltyLivroAutor WHERE LIA_ID_AUTOR = @idAutor AND LIA_ID_LIVRO = @idLivro", ioConexao);
+                    ioQuery = new SqlCommand("UPDATE LIA_LIVRO_AUTOR SET LIA_ID_AUTOR = @idAutor, LIA_PC_ROYALTY = @royaltyLivroAutor WHERE LIA_ID_LIVRO = @idLivro", ioConexao);
                     ioQuery.Parameters.Add(new SqlParameter("@idAutor", aoLivroAutor.lia_id_autor));
                     ioQuery.Parameters.Add(new SqlParameter("@idLivro", aoLivroAutor.lia_id_livro));
                     ioQuery.Parameters.Add(new SqlParameter("@royaltyLivroAutor", aoLivroAutor.lia_pc_royalty));

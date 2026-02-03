@@ -26,7 +26,7 @@
                                 <dx:ASPxTextBox ID="tbxCadastroUrlEditor" runat="server" Width="100%">
                                     <ValidationSettings ValidationGroup="MyGroup" ValidateOnLeave="true" Display="Dynamic">
                                         <RequiredField IsRequired="true" ErrorText="Digite a URL do Editor!" />
-                                        <RegularExpression ErrorText="Url inválida" ValidationExpression="(https?://)?(www\.)?[\w-]+(\.[\w-]+)*\.com(\.br)?" />
+                                        <RegularExpression ErrorText="Url inválida" ValidationExpression="([hH][tT][tT][pP][sS]?://)?(www\.)?[\w-]+(\.[\w-]+)*\.com(\.br)?" />
                                     </ValidationSettings>
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
