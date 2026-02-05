@@ -55,5 +55,4 @@ namespace ProjetoLivraria.Models
             this.liv_lia_livro_autor = liv_lia_livro_autor;
         }
     }
-
 }

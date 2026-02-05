@@ -71,27 +71,32 @@ namespace ProjetoLivraria.Livraria
 
         private void PreencherComboBoxes()
         {
-            cmbCadastroTipoLivro.DataSource = new TipoLivrosDAO().BuscarTipoLivro();
+            cmbCadastroTipoLivro.DataSource = new TipoLivrosDAO().BuscarTipoLivro().OrderBy(l => l.til_ds_descricao);
             cmbCadastroTipoLivro.DataBind();
 
-            cmbCadastroIdEditorLivro.DataSource = new EditoresDAO().BuscarEditores();
+            cmbCadastroIdEditorLivro.DataSource = new EditoresDAO().BuscarEditores().OrderBy(l => l.edi_nm_nome);
             cmbCadastroIdEditorLivro.DataBind();
 
-            cmbCadastroAutor.DataSource = new AutoresDAO().BuscarAutores();
+            cmbCadastroAutor.DataSource = new AutoresDAO().BuscarAutores().OrderBy(l => l.aut_nm_nome);
             cmbCadastroAutor.DataBind();
         }
         private void BindGridColumns()
         {
+            var colAutor = gvGerenciamentoLivros.Columns["liv_lia_livro_autor"] as GridViewDataComboBoxColumn;
+            if (colAutor != null)
+            {
+                colAutor.PropertiesComboBox.DataSource = new AutoresDAO().BuscarAutores().OrderBy(l => l.aut_nm_nome);
+            }
             var colTipo = gvGerenciamentoLivros.Columns["liv_id_tipo_livro"] as GridViewDataComboBoxColumn;
             if (colTipo != null)
             {
-                colTipo.PropertiesComboBox.DataSource = new TipoLivrosDAO().BuscarTipoLivro();
+                colTipo.PropertiesComboBox.DataSource = new TipoLivrosDAO().BuscarTipoLivro().OrderBy(l => l.til_ds_descricao);
             }
 
             var colEditor = gvGerenciamentoLivros.Columns["liv_id_editor"] as GridViewDataComboBoxColumn;
             if (colEditor != null)
             {
-                colEditor.PropertiesComboBox.DataSource = new EditoresDAO().BuscarEditores();
+                colEditor.PropertiesComboBox.DataSource = new EditoresDAO().BuscarEditores().OrderBy(l => l.edi_nm_nome);
             }
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -213,20 +218,20 @@ namespace ProjetoLivraria.Livraria
             if (e.Column.FieldName == "liv_lia_livro_autor")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
-                combo.DataSource = new AutoresDAO().BuscarAutores();
+                combo.DataSource = new AutoresDAO().BuscarAutores().OrderBy(l => l.aut_nm_nome);
                 combo.DataBind();
             }
             if (e.Column.FieldName == "liv_id_tipo_livro")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
-                combo.DataSource = new TipoLivrosDAO().BuscarTipoLivro();
+                combo.DataSource = new TipoLivrosDAO().BuscarTipoLivro().OrderBy(l => l.til_ds_descricao);
                 combo.DataBind();
             }
 
             if (e.Column.FieldName == "liv_id_editor")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
-                combo.DataSource = new EditoresDAO().BuscarEditores();
+                combo.DataSource = new EditoresDAO().BuscarEditores().OrderBy(l => l.edi_nm_nome);
                 combo.DataBind();
             }
         }
@@ -235,19 +240,19 @@ namespace ProjetoLivraria.Livraria
             if (e.Column.FieldName == "liv_lia_livro_autor")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
-                combo.DataSource = new AutoresDAO().BuscarAutores();
+                combo.DataSource = new AutoresDAO().BuscarAutores().OrderBy(l => l.aut_nm_nome);
                 combo.DataBind();
             }
             if (e.Column.FieldName == "liv_id_tipo_livro")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
-                combo.DataSource = new TipoLivrosDAO().BuscarTipoLivro();
+                combo.DataSource = new TipoLivrosDAO().BuscarTipoLivro().OrderBy(l => l.til_ds_descricao);
                 combo.DataBind();
             }
             if (e.Column.FieldName == "liv_id_editor")
             {
                 ASPxComboBox combo = e.Editor as ASPxComboBox;
-                combo.DataSource = new EditoresDAO().BuscarEditores();
+                combo.DataSource = new EditoresDAO().BuscarEditores().OrderBy(l => l.edi_nm_nome);
                 combo.DataBind();
             }
         }

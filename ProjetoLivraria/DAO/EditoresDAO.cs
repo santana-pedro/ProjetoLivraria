@@ -42,7 +42,7 @@ namespace ProjetoLivraria.DAO
                 }
                 catch
                 {
-                    throw new Exception("Erro ao buscar o(s) autor(s).");
+                    throw new Exception("Erro ao buscar o(s) editor(es).");
                 }
             }
             return loListEditores;
